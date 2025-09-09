@@ -6,4 +6,4 @@ outputs/
 output/
 logs/
 public/
-
+node_modules/

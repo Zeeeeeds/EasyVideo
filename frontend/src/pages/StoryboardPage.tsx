@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FileText,
   Plus,
@@ -56,6 +56,18 @@ const showSettings = true;
 
 const StoryboardPage: React.FC = () => {
   const [concept, setConcept] = useState('');
+  //网页加载时读缓存
+  useEffect(() => {
+    const savedConcept = localStorage.getItem('ConceptDescription');
+    if (savedConcept) {
+      setConcept(savedConcept);
+    }
+  }, []);
+  //输入框内容变化时写缓存
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setConcept(e.target.value);
+    localStorage.setItem('ConceptDescription', e.target.value);
+  };
   const [settings, setSettings] = useState<StoryboardSettings>(defaultSettings);
   const [generating, setGenerating] = useState(false);
   // const [showSettings, setShowSettings] = useState(false);
@@ -300,7 +312,7 @@ const StoryboardPage: React.FC = () => {
                 </label>
                 <textarea
                   value={concept}
-                  onChange={(e) => setConcept(e.target.value)}
+                  onChange={onChange}
                   placeholder="描述您的视频概念，例如：一个关于环保主题的短片，讲述一个小女孩在城市中寻找绿色空间的故事，风格温馨感人，时长约60秒"
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                   rows={4}
